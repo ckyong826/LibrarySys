@@ -47,7 +47,11 @@
       </table>
     </div>
     <!-- Add Loan Modal -->
-    <div v-if="showLoanModal" class="modal-backdrop" @click.self="closeLoanModal">
+    <div
+      v-if="showLoanModal"
+      class="modal-backdrop"
+      @click.self="closeLoanModal"
+    >
       <div class="modal-dialog animate-fade-in">
         <div class="modal-content">
           <div class="modal-header">
@@ -224,8 +228,11 @@ export default {
 <style scoped>
 .modal-backdrop {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.45);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
   z-index: 1050;
   display: flex;
   align-items: center;
@@ -233,15 +240,25 @@ export default {
   animation: fadeInBg 0.3s;
 }
 @keyframes fadeInBg {
-  from { background: rgba(0,0,0,0); }
-  to { background: rgba(0,0,0,0.45); }
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    background: rgba(0, 0, 0, 0.45);
+  }
 }
 .animate-fade-in {
   animation: fadeInModal 0.3s;
 }
 @keyframes fadeInModal {
-  from { transform: translateY(40px) scale(0.98); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+  from {
+    transform: translateY(40px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 .modal-dialog {
   max-width: 500px;
