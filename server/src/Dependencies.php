@@ -24,11 +24,15 @@ return function (App $app) {
     });
 
     $container->set(\App\Controllers\LoanController::class, function($c) {
-        return new \App\Controllers\LoanController($c->get(\PDO::class));
+        return new \App\Controllers\LoanController(new \App\Models\Loan($c->get(\PDO::class)));
     });
 
     $container->set(\App\Controllers\AuthController::class, function($c) {
-        return new \App\Controllers\AuthController($c->get(\PDO::class));
+        return new \App\Controllers\AuthController(new \App\Models\User($c->get(\PDO::class)));
+    });
+
+    $container->set(\App\Controllers\UserController::class, function($c) {
+        return new \App\Controllers\UserController(new \App\Models\User($c->get(\PDO::class)));
     });
 
     $container->set(\App\Middleware\AuthMiddleware::class, function($c) {

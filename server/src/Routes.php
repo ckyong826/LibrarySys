@@ -13,6 +13,12 @@ return function (App $app) {
     $group->get('/auth/me', \App\Controllers\AuthController::class . ':me');
     $group->post('/auth/logout', \App\Controllers\AuthController::class . ':logout');
 
+    // USERS
+    $group->get('/users', \App\Controllers\UserController::class . ':getAll');
+
+    // STATS
+    $group->get('/stats', \App\Controllers\LoanController::class . ':getStats');
+
     // BOOKS
     $group->get('/books', \App\Controllers\BookController::class . ':index');
     $group->get('/books/{id}', \App\Controllers\BookController::class . ':show');
@@ -31,7 +37,7 @@ return function (App $app) {
     $group->get('/loans', \App\Controllers\LoanController::class . ':index');
     $group->get('/loans/{id}', \App\Controllers\LoanController::class . ':show');
     $group->post('/loans', \App\Controllers\LoanController::class . ':create');
-    $group->put('/loans/{id}', \App\Controllers\LoanController::class . ':update');
+    $group->put('/loans/{id}/return', \App\Controllers\LoanController::class . ':returnLoan');
     $group->delete('/loans/{id}', \App\Controllers\LoanController::class . ':delete');
   })->add(\App\Middleware\AuthMiddleware::class);
 };

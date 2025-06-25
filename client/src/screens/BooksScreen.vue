@@ -1,55 +1,68 @@
 <template>
   <div>
-    <h2>Books Management</h2>
-    <div class="mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="h3 mb-0 text-gray-800">Books Management</h2>
       <button class="btn btn-primary" @click="openAddBookModal">
-        Add New Book
+        <i class="fas fa-plus me-2"></i>Add New Book
       </button>
     </div>
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>ISBN</th>
-            <th>Published Year</th>
-            <th>Available/Total</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="book in books" :key="book.id">
-            <td>{{ book.title }}</td>
-            <td>{{ book.author_name }}</td>
-            <td>{{ book.isbn }}</td>
-            <td>{{ book.published_year }}</td>
-            <td>{{ book.available_copies }}/{{ book.total_copies }}</td>
-            <td>
-              <button
-                class="btn btn-sm btn-warning me-2"
-                @click="editBook(book)"
-              >
-                Edit
-              </button>
-              <button
-                class="btn btn-sm btn-danger"
-                @click="deleteBook(book.id)"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Published Year</th>
+                <th class="text-center">Availability</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="books.length === 0">
+                <td colspan="6" class="text-center p-4">No books found.</td>
+              </tr>
+              <tr v-for="book in books" :key="book.id">
+                <td>{{ book.title }}</td>
+                <td>{{ book.author_name }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.published_year }}</td>
+                <td class="text-center">
+                  <span class="badge" :class="getAvailabilityClass(book)">
+                    {{ book.available_copies }} / {{ book.total_copies }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button
+                    class="btn btn-sm btn-outline-primary me-2"
+                    @click="editBook(book)"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    @click="deleteBook(book.id)"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+
     <!-- Add/Edit Book Modal -->
     <div
       v-if="showBookModal"
       class="modal-backdrop"
       @click.self="closeBookModal"
     >
-      <div class="modal-dialog animate-fade-in">
+      <div class="modal-dialog modal-dialog-centered animate-fade-in">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
@@ -64,21 +77,24 @@
           <div class="modal-body">
             <form @submit.prevent="saveBook">
               <div class="mb-3">
-                <label class="form-label">Title</label>
+                <label for="bookTitle" class="form-label">Title</label>
                 <input
                   type="text"
+                  id="bookTitle"
                   class="form-control"
                   v-model="bookForm.title"
                   required
                 />
               </div>
               <div class="mb-3">
-                <label class="form-label">Author</label>
+                <label for="bookAuthor" class="form-label">Author</label>
                 <select
-                  class="form-control"
+                  id="bookAuthor"
+                  class="form-select"
                   v-model="bookForm.author_id"
                   required
                 >
+                  <option disabled value="">Please select an author</option>
                   <option
                     v-for="author in authors"
                     :key="author.id"
@@ -88,48 +104,68 @@
                   </option>
                 </select>
               </div>
-              <div class="mb-3">
-                <label class="form-label">ISBN</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="bookForm.isbn"
-                />
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="bookIsbn" class="form-label">ISBN</label>
+                  <input
+                    type="text"
+                    id="bookIsbn"
+                    class="form-control"
+                    v-model="bookForm.isbn"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="bookPublishedYear" class="form-label"
+                    >Published Year</label
+                  >
+                  <input
+                    type="number"
+                    id="bookPublishedYear"
+                    class="form-control"
+                    v-model="bookForm.published_year"
+                  />
+                </div>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Published Year</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  v-model="bookForm.published_year"
-                />
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="bookTotalCopies" class="form-label"
+                    >Total Copies</label
+                  >
+                  <input
+                    type="number"
+                    id="bookTotalCopies"
+                    class="form-control"
+                    v-model="bookForm.total_copies"
+                    required
+                    min="0"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="bookAvailableCopies" class="form-label"
+                    >Available Copies</label
+                  >
+                  <input
+                    type="number"
+                    id="bookAvailableCopies"
+                    class="form-control"
+                    v-model="bookForm.available_copies"
+                    required
+                    min="0"
+                  />
+                </div>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Available Copies</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  v-model="bookForm.available_copies"
-                  required
-                />
+              <div class="d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-secondary me-2"
+                  @click="closeBookModal"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  {{ editingBook ? "Update" : "Save" }}
+                </button>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Total Copies</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  v-model="bookForm.total_copies"
-                  required
-                />
-              </div>
-              <button type="submit" class="btn btn-primary">Save</button>
-              <button
-                type="button"
-                class="btn btn-secondary ms-2"
-                @click="closeBookModal"
-              >
-                Cancel
-              </button>
             </form>
           </div>
         </div>
@@ -178,7 +214,7 @@ export default {
       this.editingBook = null;
       this.bookForm = {
         title: "",
-        author_id: this.authors.length ? this.authors[0].id : "",
+        author_id: "",
         isbn: "",
         published_year: "",
         available_copies: 1,
@@ -230,6 +266,17 @@ export default {
         }
       }
     },
+    getAvailabilityClass(book) {
+      if (!book.total_copies) return "bg-secondary";
+      const availability = book.available_copies / book.total_copies;
+      if (availability === 0) {
+        return "bg-danger";
+      } else if (availability < 0.3) {
+        return "bg-warning text-dark";
+      } else {
+        return "bg-success";
+      }
+    },
   },
   async mounted() {
     await this.fetchAuthors();
@@ -244,19 +291,38 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1050;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: fadeInBg 0.3s;
 }
+.table-hover tbody tr:hover {
+  background-color: #f8f9fc;
+}
+.btn-outline-primary {
+  color: #4e73df;
+  border-color: #4e73df;
+}
+.btn-outline-primary:hover {
+  background-color: #4e73df;
+  color: #fff;
+}
+.btn-outline-danger {
+  color: #e74a3b;
+  border-color: #e74a3b;
+}
+.btn-outline-danger:hover {
+  background-color: #e74a3b;
+  color: #fff;
+}
 @keyframes fadeInBg {
   from {
     background: rgba(0, 0, 0, 0);
   }
   to {
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.5);
   }
 }
 .animate-fade-in {
@@ -275,5 +341,11 @@ export default {
 .modal-dialog {
   max-width: 500px;
   width: 100%;
+}
+.modal-content {
+  background-color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 20px;
 }
 </style>

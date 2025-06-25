@@ -1,56 +1,65 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card mt-5">
-          <div class="card-header">
-            <h4 class="text-center">Login to AgroTrack</h4>
-          </div>
-          <div class="card-body">
-            <form @submit.prevent="login">
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  v-model="form.email"
-                  required
-                  :disabled="loading"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  v-model="form.password"
-                  required
-                  :disabled="loading"
-                />
-              </div>
-              <div class="d-grid gap-2">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  :disabled="loading"
-                >
-                  <span
-                    v-if="loading"
-                    class="spinner-border spinner-border-sm me-2"
-                  ></span>
-                  {{ loading ? "Logging in..." : "Login" }}
-                </button>
-              </div>
-            </form>
-            <div class="text-center mt-3">
-              <p>
-                Don't have an account?
-                <router-link to="/register">Register here</router-link>
-              </p>
+  <div class="login-wrapper">
+    <div class="card shadow-lg">
+      <div class="card-body p-md-5">
+        <div class="text-center mb-4">
+          <h2 class="card-title">Welcome Back!</h2>
+          <p class="text-muted">Login to your LibrarySys account</p>
+        </div>
+        <form @submit.prevent="login">
+          <div class="mb-4">
+            <label for="email" class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                v-model="form.email"
+                required
+                :disabled="loading"
+                placeholder="you@example.com"
+              />
             </div>
           </div>
+          <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="fas fa-lock"></i>
+              </span>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                v-model="form.password"
+                required
+                :disabled="loading"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
+          <div class="d-grid gap-2">
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg"
+              :disabled="loading"
+            >
+              <span
+                v-if="loading"
+                class="spinner-border spinner-border-sm me-2"
+              ></span>
+              {{ loading ? "Logging in..." : "Login" }}
+            </button>
+          </div>
+        </form>
+        <div class="text-center mt-4">
+          <p class="mb-0">
+            Don't have an account?
+            <router-link to="/register" class="fw-bold">Sign up</router-link>
+          </p>
         </div>
       </div>
     </div>
@@ -111,43 +120,47 @@ export default {
 </script>
 
 <style scoped>
-body,
-.container {
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 .card {
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
   border: none;
+  width: 100%;
+  max-width: 450px;
 }
-.card-header {
-  background: #4e73df;
-  color: #fff;
-  border-radius: 18px 18px 0 0;
-  text-align: center;
+.card-title {
+  font-weight: 700;
+  color: #333;
+}
+.input-group-text {
+  background-color: #f8f9fa;
+  border-right: 0;
+}
+.form-control {
+  border-left: 0;
+  padding: 0.75rem 1rem;
 }
 .form-control:focus {
-  border-color: #4e73df;
-  box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.15);
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-left: 0;
 }
 .btn-primary {
-  background: linear-gradient(90deg, #4e73df 0%, #1cc88a 100%);
-  border: none;
-  transition: background 0.3s, box-shadow 0.3s;
-  box-shadow: 0 2px 8px rgba(78, 115, 223, 0.08);
+  background-color: #007bff;
+  border-color: #007bff;
+  padding: 0.75rem;
+  font-weight: 600;
 }
-.btn-primary:hover,
-.btn-primary:focus {
-  background: linear-gradient(90deg, #1cc88a 0%, #4e73df 100%);
-  box-shadow: 0 4px 16px rgba(28, 200, 138, 0.12);
+.btn-primary:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
 }
-.text-center a {
-  color: #1cc88a;
-  text-decoration: underline;
-  transition: color 0.2s;
-}
-.text-center a:hover {
-  color: #4e73df;
+.fw-bold {
+  color: #007bff;
 }
 </style>

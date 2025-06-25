@@ -96,7 +96,9 @@
     </nav>
 
     <div class="container mt-4">
-      <router-view></router-view>
+      <div class="router-view-container">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -136,34 +138,33 @@ export default {
 
       this.ws.onopen = () => {
         console.log("WebSocket connected");
+        this.ws.send(JSON.stringify({ token: auth.state.token }));
       };
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        this.handleWebSocketMessage(data);
+        if (data.message) {
+          this.showNotification(data.message, "success");
+        }
+        if (data.type === "book_updated" || data.type === "loan_added") {
+          // You might want a more sophisticated way to update views
+          // For now, we just notify
+        }
       };
 
       this.ws.onclose = () => {
-        console.log("WebSocket disconnected");
-        setTimeout(() => this.setupWebSocket(), 5000);
+        console.log("WebSocket disconnected. Reconnecting...");
+        setTimeout(() => this.setupWebSocket(), 3000);
       };
 
       this.ws.onerror = (error) => {
         console.error("WebSocket error:", error);
+        this.ws.close();
       };
     },
 
     handleWebSocketMessage(data) {
-      switch (data.type) {
-        case "sensor_reading":
-          this.$root.$emit("sensor-reading", data);
-          break;
-        case "actuator_status":
-          this.$root.$emit("actuator-status", data);
-          break;
-        default:
-          console.log("Unknown message type:", data.type);
-      }
+      console.log("Received WebSocket data:", data);
     },
   },
 
@@ -248,6 +249,13 @@ html {
 .container {
   margin-top: 2.5rem !important;
   margin-bottom: 2.5rem;
+}
+/* Style views to have a card-like appearance */
+.router-view-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 18px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
 }
 @media (max-width: 768px) {
   .navbar {

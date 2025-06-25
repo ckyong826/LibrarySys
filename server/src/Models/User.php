@@ -91,6 +91,13 @@ class User {
         return $stmt->fetch();
     }
 
+    public function getAll() {
+        $query = "SELECT id, name, email, created_at FROM {$this->table} ORDER BY name ASC";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
     public function generateJWT($user) {
         $payload = [
             'iss' => 'agrotrack',

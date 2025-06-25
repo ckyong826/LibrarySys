@@ -1,49 +1,58 @@
 <template>
   <div>
-    <h2>Authors Management</h2>
-    <div class="mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="h3 mb-0 text-gray-800">Authors Management</h2>
       <button class="btn btn-primary" @click="openAddAuthorModal">
-        Add New Author
+        <i class="fas fa-plus me-2"></i>Add New Author
       </button>
     </div>
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Bio</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="author in authors" :key="author.id">
-            <td>{{ author.name }}</td>
-            <td>{{ author.bio }}</td>
-            <td>
-              <button
-                class="btn btn-sm btn-warning me-2"
-                @click="editAuthor(author)"
-              >
-                Edit
-              </button>
-              <button
-                class="btn btn-sm btn-danger"
-                @click="deleteAuthor(author.id)"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Biography</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="authors.length === 0">
+                <td colspan="3" class="text-center p-4">No authors found.</td>
+              </tr>
+              <tr v-for="author in authors" :key="author.id">
+                <td>{{ author.name }}</td>
+                <td>{{ truncate(author.bio, 100) }}</td>
+                <td class="text-end">
+                  <button
+                    class="btn btn-sm btn-outline-primary me-2"
+                    @click="editAuthor(author)"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    @click="deleteAuthor(author.id)"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+
     <!-- Add/Edit Author Modal -->
     <div
       v-if="showAuthorModal"
       class="modal-backdrop"
       @click.self="closeAuthorModal"
     >
-      <div class="modal-dialog animate-fade-in">
+      <div class="modal-dialog modal-dialog-centered animate-fade-in">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
@@ -58,29 +67,36 @@
           <div class="modal-body">
             <form @submit.prevent="saveAuthor">
               <div class="mb-3">
-                <label class="form-label">Name</label>
+                <label for="authorName" class="form-label">Name</label>
                 <input
                   type="text"
                   class="form-control"
+                  id="authorName"
                   v-model="authorForm.name"
                   required
                 />
               </div>
               <div class="mb-3">
-                <label class="form-label">Bio</label>
+                <label for="authorBio" class="form-label">Biography</label>
                 <textarea
                   class="form-control"
+                  id="authorBio"
+                  rows="4"
                   v-model="authorForm.bio"
                 ></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Save</button>
-              <button
-                type="button"
-                class="btn btn-secondary ms-2"
-                @click="closeAuthorModal"
-              >
-                Cancel
-              </button>
+              <div class="d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-secondary me-2"
+                  @click="closeAuthorModal"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  {{ editingAuthor ? "Update" : "Save" }}
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -157,6 +173,12 @@ export default {
         }
       }
     },
+    truncate(text, length) {
+      if (text && text.length > length) {
+        return text.substring(0, length) + "...";
+      }
+      return text;
+    },
   },
   mounted() {
     this.fetchAuthors();
@@ -170,12 +192,31 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1050;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: fadeInBg 0.3s;
+}
+.table-hover tbody tr:hover {
+  background-color: #f8f9fc;
+}
+.btn-outline-primary {
+  color: #4e73df;
+  border-color: #4e73df;
+}
+.btn-outline-primary:hover {
+  background-color: #4e73df;
+  color: #fff;
+}
+.btn-outline-danger {
+  color: #e74a3b;
+  border-color: #e74a3b;
+}
+.btn-outline-danger:hover {
+  background-color: #e74a3b;
+  color: #fff;
 }
 @keyframes fadeInBg {
   from {
@@ -201,5 +242,11 @@ export default {
 .modal-dialog {
   max-width: 500px;
   width: 100%;
+}
+.modal-content {
+  background-color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 20px;
 }
 </style>

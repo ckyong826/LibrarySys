@@ -1,148 +1,135 @@
 <template>
   <div>
-    <h2>Library Dashboard</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="h3 mb-0 text-gray-800">Dashboard</h2>
+    </div>
     <div class="row">
-      <div class="col-md-3">
-        <div class="card mb-4">
-          <div class="card-header">Total Books</div>
-          <div class="card-body display-5 text-center">{{ stats.books }}</div>
+      <!-- Stat Cards -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                >
+                  Total Books
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ stats.books }}
+                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-book fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-md-3">
-        <div class="card mb-4">
-          <div class="card-header">Total Authors</div>
-          <div class="card-body display-5 text-center">{{ stats.authors }}</div>
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                >
+                  Total Authors
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ stats.authors }}
+                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-users fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-md-3">
-        <div class="card mb-4">
-          <div class="card-header">Total Users</div>
-          <div class="card-body display-5 text-center">{{ stats.users }}</div>
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-info text-uppercase mb-1"
+                >
+                  Active Loans
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ stats.activeLoans }}
+                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-hand-holding-heart fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-md-3">
-        <div class="card mb-4">
-          <div class="card-header">Active Loans</div>
-          <div class="card-body display-5 text-center">
-            {{ stats.activeLoans }}
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                >
+                  Registered Users
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ stats.users }}
+                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-user-friends fa-2x text-gray-300"></i>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="card mt-4">
-      <div class="card-header">Recent Loans</div>
+    <!-- Recent Loans Table -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Recent Loans</h6>
+      </div>
       <div class="card-body">
-        <div v-if="recentLoans.length === 0">No recent loans.</div>
-        <table v-else class="table">
-          <thead>
-            <tr>
-              <th>Book</th>
-              <th>User</th>
-              <th>Loan Date</th>
-              <th>Due Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="loan in recentLoans" :key="loan.id">
-              <td>{{ loan.book_title }}</td>
-              <td>{{ loan.user_name }}</td>
-              <td>{{ loan.loan_date }}</td>
-              <td>{{ loan.due_date }}</td>
-              <td>{{ loan.status }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="mt-5">
-      <h4>All Books</h4>
-      <div class="table-responsive mb-4">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>ISBN</th>
-              <th>Published Year</th>
-              <th>Available/Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="book in allBooks" :key="book.id">
-              <td>{{ book.title }}</td>
-              <td>{{ book.author_name }}</td>
-              <td>{{ book.isbn }}</td>
-              <td>{{ book.published_year }}</td>
-              <td>{{ book.available_copies }}/{{ book.total_copies }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h4>All Authors</h4>
-      <div class="table-responsive mb-4">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Bio</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="author in allAuthors" :key="author.id">
-              <td>{{ author.name }}</td>
-              <td>{{ author.bio }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h4>All Users</h4>
-      <div class="table-responsive mb-4">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in allUsers" :key="user.id">
-              <td>{{ user.name }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.role }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h4>All Loans</h4>
-      <div class="table-responsive mb-4">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Book</th>
-              <th>User</th>
-              <th>Loan Date</th>
-              <th>Due Date</th>
-              <th>Return Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="loan in allLoans" :key="loan.id">
-              <td>{{ loan.book_title }}</td>
-              <td>{{ loan.user_name }}</td>
-              <td>{{ loan.loan_date }}</td>
-              <td>{{ loan.due_date }}</td>
-              <td>{{ loan.return_date || "-" }}</td>
-              <td>{{ loan.status }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-if="recentLoans.length === 0" class="text-center p-4">
+          No recent loan activity.
+        </div>
+        <div v-else class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Book Title</th>
+                <th>User</th>
+                <th>Loan Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="loan in recentLoans" :key="loan.id">
+                <td>{{ loan.book_title }}</td>
+                <td>{{ loan.user_name }}</td>
+                <td>{{ formatDate(loan.loan_date) }}</td>
+                <td>{{ formatDate(loan.due_date) }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    :class="{
+                      'bg-success': loan.status === 'returned',
+                      'bg-warning': loan.status === 'borrowed',
+                    }"
+                    >{{ loan.status }}</span
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -161,81 +148,78 @@ export default {
         activeLoans: 0,
       },
       recentLoans: [],
-      allBooks: [],
-      allAuthors: [],
-      allUsers: [],
-      allLoans: [],
     };
   },
   methods: {
-    async fetchStats() {
+    async fetchDashboardData() {
       try {
-        const [booksRes, authorsRes, usersRes, loansRes] = await Promise.all([
-          axios.get("http://localhost:8000/api/books"),
-          axios.get("http://localhost:8000/api/authors"),
-          axios.get("http://localhost:8000/api/users"),
-          axios.get("http://localhost:8000/api/loans"),
+        const [statsRes, loansRes] = await Promise.all([
+          axios.get("http://localhost:8000/api/stats"),
+          axios.get(
+            "http://localhost:8000/api/loans?_sort=loan_date&_order=desc&_limit=10"
+          ),
         ]);
-        this.stats.books = booksRes.data.length;
-        this.stats.authors = authorsRes.data.length;
-        this.stats.users = usersRes.data.length;
-        this.stats.activeLoans = loansRes.data.filter(
-          (l) => l.status === "borrowed"
-        ).length;
-        this.recentLoans = loansRes.data.slice(0, 10);
-        this.allBooks = booksRes.data;
-        this.allAuthors = authorsRes.data;
-        this.allUsers = usersRes.data;
-        this.allLoans = loansRes.data;
+
+        this.stats = statsRes.data;
+        this.recentLoans = loansRes.data;
       } catch (error) {
         this.$root.showNotification("Failed to fetch dashboard data", "error");
       }
     },
+    formatDate(dateString) {
+      if (!dateString) return "N/A";
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    },
   },
   mounted() {
-    this.fetchStats();
+    this.fetchDashboardData();
   },
 };
 </script>
 
 <style scoped>
-body,
-.container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e0eafc 100%);
+.card.border-left-primary {
+  border-left: 0.25rem solid #4e73df !important;
 }
-h2 {
-  color: #4e73df;
-  margin-bottom: 2rem;
-  font-weight: 700;
+.text-primary {
+  color: #4e73df !important;
 }
-.card {
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  border: none;
-  margin-bottom: 2rem;
+.card.border-left-success {
+  border-left: 0.25rem solid #1cc88a !important;
 }
-.card-header {
-  background: #1cc88a;
-  color: #fff;
-  border-radius: 16px 16px 0 0;
-  font-weight: 600;
+.text-success {
+  color: #1cc88a !important;
 }
-.card-body {
-  background: #fff;
-  border-radius: 0 0 16px 16px;
+.card.border-left-info {
+  border-left: 0.25rem solid #36b9cc !important;
 }
-.display-5 {
-  font-size: 2.5rem;
-  font-weight: 700;
+.text-info {
+  color: #36b9cc !important;
 }
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column;
-  }
-  .col-md-6 {
-    width: 100%;
-    margin-bottom: 1.5rem;
-  }
+.card.border-left-warning {
+  border-left: 0.25rem solid #f6c23e !important;
+}
+.text-warning {
+  color: #f6c23e !important;
+}
+.text-xs {
+  font-size: 0.7rem;
+}
+.text-gray-300 {
+  color: #dddfeb !important;
+}
+.text-gray-800 {
+  color: #5a5c69 !important;
+}
+.shadow {
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+}
+.table-hover tbody tr:hover {
+  background-color: #f8f9fc;
+}
+.badge {
+  padding: 0.4em 0.6em;
+  font-size: 0.85em;
 }
 </style>
