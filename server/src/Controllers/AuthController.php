@@ -9,8 +9,8 @@ use App\Models\User;
 class AuthController {
     private $userModel;
 
-    public function __construct($db) {
-        $this->userModel = new User($db);
+    public function __construct(User $userModel) {
+        $this->userModel = $userModel;
     }
 
     public function register(Request $request, Response $response) {
